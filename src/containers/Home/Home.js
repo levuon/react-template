@@ -4,21 +4,26 @@ import localize from '../../utils/hoc/localize'
 import UsersStore from 'lib/users/store'
 import UsersActions from 'lib/users/actions'
 import Count from 'components/count'
+import fetch from 'node-fetch'
 
 class Home extends Component {
   constructor ( props ) {
     super( props )
     this.state = {
       users: [],
-      total: 0
+      total: 0,
+      name: 'levuon'
     }
     this.show = this.show.bind( this )
     this._updateSiteUsers = this._updateSiteUsers.bind( this )
   }
 
-  componentWillMount () {
-    UsersStore.on( 'change', this._updateSiteUsers );
-    UsersActions.fetchUsers();
+  async componentWillMount () {
+    // UsersStore.on( 'change', this._updateSiteUsers );
+    // UsersActions.fetchUsers();
+    const  url = `https://api.github.com/users/${this.state.name}`;
+    const response = await fetch( url );
+    console.log(response)
   }
 
   _getState () {

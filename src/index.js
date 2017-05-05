@@ -15,7 +15,3 @@ match( { history: browserHistory, routes }, ( error, redirectLocation, renderPro
    document.getElementById( 'root' )
   )
 } )
-
-
-
-header>{'I am header'} 
