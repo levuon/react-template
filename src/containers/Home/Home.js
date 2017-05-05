@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import localize from '../../utils/hoc/localize'
 import UsersStore from 'lib/users/store'
 import UsersActions from 'lib/users/actions'
-
 import Count from 'components/count'
 
 class Home extends Component {
