@@ -4,7 +4,6 @@ import localize from '../../utils/hoc/localize'
 import UsersStore from 'lib/users/store'
 import UsersActions from 'lib/users/actions'
 import Count from 'components/count'
-import fetch from 'node-fetch'
 
 class Home extends Component {
   constructor ( props ) {
@@ -19,11 +18,8 @@ class Home extends Component {
   }
 
   async componentWillMount () {
-    // UsersStore.on( 'change', this._updateSiteUsers );
-    // UsersActions.fetchUsers();
-    const  url = `https://api.github.com/users/${this.state.name}`;
-    const response = await fetch( url );
-    console.log(response)
+    UsersStore.on( 'change', this._updateSiteUsers );
+    UsersActions.fetchUsers();
   }
 
   _getState () {

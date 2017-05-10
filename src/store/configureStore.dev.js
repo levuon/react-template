@@ -3,15 +3,23 @@ import thunk from 'redux-thunk'
 import rootReducer from '../state'
 import DevTools from '../containers/DevTools/DevTools'
 import {persistStore, autoRehydrate} from 'redux-persist'
-import wef from '../lib/wrap-es6-functions'
-
-wef()
+import localForage from 'localForage'
 
 const isDebuggingInChrome = process.env.NODE_ENV !== 'production' && !!window.navigator.userAgent
 
 export default function configureStore(preloadedState) {
-    const store = createStore(rootReducer, preloadedState, compose(applyMiddleware(thunk), autoRehydrate(), DevTools.instrument()));
-    persistStore(store);
+
+    const store = createStore(
+      rootReducer,
+      preloadedState,
+      compose(
+        applyMiddleware(thunk),
+        // 状态持久化
+        autoRehydrate(),
+        DevTools.instrument()
+      )
+    );
+    persistStore(store, {storage: localForage});
 
     if( isDebuggingInChrome ) {
       window.store = store;
@@ -20,7 +28,6 @@ export default function configureStore(preloadedState) {
     // if (module.hot) {
     //     module.hot.accept('../state', () => {
     //         const nextRootReducer = require('../state')
-    //
     //         store.replaceReducer(nextRootReducer)
     //     })
     // }
