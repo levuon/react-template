@@ -2,13 +2,18 @@ var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config');
 var compiler = webpack(webpackConfig);
-var cpexec = require('child_process').exec;
+// var cpexec = require('child_process').exec;
+// var Parse = require('parse/node');
 // var spawn = require('child_process').spawn;
 
-var host = '192.168.101.88'
+var host = 'localhost'
 var port = 3000;
 
 
+
+// Parse.initialize('react-template');
+// Parse.serverURL = 'http://localhost:1337/parse'
+// console.log(Parse.serverURL);
 new WebpackDevServer(compiler,webpackConfig.devServer)
     .listen(port, host, function (err) {
         if (err) {

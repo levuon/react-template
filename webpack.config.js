@@ -24,20 +24,22 @@ let config = {
             {
                 test: /\.scss/,
                 loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
-            }
+            },
+            { test: /\.json$/, loader: "json-loader"}
         ]
     },
     resolve: {
         extensions: [
             '.json', '.js', '.jsx'
         ],
+        // 引用模块可以不用绝对路径或者相对路径
         modules: [path.resolve(__dirname, "src"), "node_modules"],
         alias: {
             // 'dispatcher': '/src/dispatcher',
         }
     },
     devServer: {
-        host: '192.168.101.88',
+        host: 'localhost',
         historyApiFallback: true,
         hot: true,
         noInfo: false,

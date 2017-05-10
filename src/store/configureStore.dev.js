@@ -1,28 +1,36 @@
-import { applyMiddleware, compose, createStore } from 'redux'
+import {applyMiddleware, compose, createStore} from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from '../state'
 import DevTools from '../containers/DevTools/DevTools'
-import wef from '../lib/wrap-es6-functions'
+import {persistStore, autoRehydrate} from 'redux-persist'
+import localForage from 'localForage'
 
-wef()
+const isDebuggingInChrome = process.env.NODE_ENV !== 'production' && !!window.navigator.userAgent
 
-export default function configureStore ( preloadedState ) {
-  const store = createStore(
-   rootReducer,
-   preloadedState,
-   compose(
-    applyMiddleware( thunk ),
-    DevTools.instrument()
-   )
-  )
+export default function configureStore(preloadedState) {
 
-  if ( module.hot ) {
-    module.hot.accept( '../state', () => {
-      const nextRootReducer = require( '../state' )
+    const store = createStore(
+      rootReducer,
+      preloadedState,
+      compose(
+        applyMiddleware(thunk),
+        // 状态持久化
+        autoRehydrate(),
+        DevTools.instrument()
+      )
+    );
+    persistStore(store, {storage: localForage});
 
-      store.replaceReducer( nextRootReducer )
-    } )
-  }
+    if( isDebuggingInChrome ) {
+      window.store = store;
+    }
 
-  return store
+    // if (module.hot) {
+    //     module.hot.accept('../state', () => {
+    //         const nextRootReducer = require('../state')
+    //         store.replaceReducer(nextRootReducer)
+    //     })
+    // }
+
+    return store
 }
