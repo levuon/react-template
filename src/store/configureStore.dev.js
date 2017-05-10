@@ -1,28 +1,29 @@
-import { applyMiddleware, compose, createStore } from 'redux'
+import {applyMiddleware, compose, createStore} from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from '../state'
 import DevTools from '../containers/DevTools/DevTools'
+import {persistStore, autoRehydrate} from 'redux-persist'
 import wef from '../lib/wrap-es6-functions'
 
 wef()
 
-export default function configureStore ( preloadedState ) {
-  const store = createStore(
-   rootReducer,
-   preloadedState,
-   compose(
-    applyMiddleware( thunk ),
-    DevTools.instrument()
-   )
-  )
+const isDebuggingInChrome = process.env.NODE_ENV !== 'production' && !!window.navigator.userAgent
 
-  if ( module.hot ) {
-    module.hot.accept( '../state', () => {
-      const nextRootReducer = require( '../state' )
+export default function configureStore(preloadedState) {
+    const store = createStore(rootReducer, preloadedState, compose(applyMiddleware(thunk), autoRehydrate(), DevTools.instrument()));
+    persistStore(store);
 
-      store.replaceReducer( nextRootReducer )
-    } )
-  }
+    if( isDebuggingInChrome ) {
+      window.store = store;
+    }
 
-  return store
+    // if (module.hot) {
+    //     module.hot.accept('../state', () => {
+    //         const nextRootReducer = require('../state')
+    //
+    //         store.replaceReducer(nextRootReducer)
+    //     })
+    // }
+
+    return store
 }
