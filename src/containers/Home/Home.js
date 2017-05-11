@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
+import { connect, b } from 'react-redux'
 import classNames from 'classnames'
 import localize from '../../utils/hoc/localize'
 import UsersStore from 'lib/users/store'
 import UsersActions from 'lib/users/actions'
 import Count from 'components/count'
+import Card from 'components/card'
+const {
+  loadSlogan
+}  = require('../../actions').default
 
 class Home extends Component {
   constructor ( props ) {
@@ -13,51 +18,34 @@ class Home extends Component {
       total: 0,
       name: 'levuon'
     }
-    this.show = this.show.bind( this )
-    this._updateSiteUsers = this._updateSiteUsers.bind( this )
   }
 
-  async componentWillMount () {
-    UsersStore.on( 'change', this._updateSiteUsers );
-    UsersActions.fetchUsers();
-  }
-
-  _getState () {
-    var fetchingUsers;
-    fetchingUsers = UsersStore.getUsers();
-
-    return Object.assign( {}, {
-      users: fetchingUsers.users,
-      total: fetchingUsers.total
-    } );
-  }
-
-  _updateSiteUsers () {
-    this.setState( this._getState() )
-  }
-
-  show () {
-    const { show } = this.props;
-    show();
+  componentDidMount() {
+    this.props.dispatch(loadSlogan());
   }
 
   render () {
-
-    const classes = classNames( this.props.className, {
-      'is-loading': !this.props.post || !this.props.connections
-    } );
     return (
-     <div onClick = {this.show} >
+     <div  onClick = {this.show} >
        <h1>{this.state.users.map( user => {
          return (
           <div key = {user.id} >{`${user.id}: ${user.name}`}</div>
          )
        } )}</h1>
-       <h1>{this.state.total}</h1>
-       <Count count = {2222} />
+       <h1>{this.props.slogan}</h1>
+       {/* <Count count = {2222} /> */}
+        <Card></Card>
      </div>
     )
   }
 }
 
-export default localize( Home )
+
+
+function select(store) {
+  return {
+    slogan: store.home.items.slogan,
+  };
+}
+
+export default connect(select)(Home);

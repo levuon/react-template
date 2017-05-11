@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 
 import {
-  HOME
+  HOME,
+  SLOGAN
 } from 'state/action-types';
 
 export function items ( state = {}, action ) {
@@ -9,6 +10,10 @@ export function items ( state = {}, action ) {
     case HOME:
       return Object.assign( {}, state, {
         [ action.user.ID ]: action.user
+      } );
+    case SLOGAN:
+      return  Object.assign( {}, state, {
+        slogan: action.slogan
       } );
   }
 
