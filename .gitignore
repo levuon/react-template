@@ -6,4 +6,4 @@ node_modules
 .vscode
 .DS_Store
 test
-./npm-debu*
+npm-debug.log
