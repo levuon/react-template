@@ -34,7 +34,7 @@ class Home extends Component {
        } )}</h1>
        <h1>{this.props.slogan}</h1>
        {/* <Count count = {2222} /> */}
-        <Card></Card>
+       <Card color="#FF6663"/>
      </div>
     )
   }

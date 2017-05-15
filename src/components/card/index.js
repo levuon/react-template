@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import Square from '../square'
+import Label from '../label'
 
 export default class Card extends Component {
 
@@ -13,7 +15,10 @@ export default class Card extends Component {
         };
 
         return (
-            <div style={cardStyle}></div>
+            <div style={cardStyle}>
+               <Square color={this.props.color}/>
+               <Label color={this.props.color}/>
+            </div>
         )
     }
 }
